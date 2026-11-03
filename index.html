@@ -191,14 +191,6 @@
             transform: scale(1.02);
         }
 
-        .zoom img {
-            transition: transform 700ms ease-out;
-        }
-
-        .zoom:hover img {
-            transform: scale(1.05);
-        }
-
         #header {
             transition: box-shadow 250ms ease-out, background-color 250ms ease-out;
         }
@@ -209,31 +201,6 @@
             box-shadow: 0 6px 24px rgba(34, 40, 49, .2);
         }
 
-        /* Image placeholders: drop real files in /images and the hatch disappears */
-        .ph {
-            position: relative;
-            background: repeating-linear-gradient(45deg, #e6e3dc, #e6e3dc 10px, #efede7 10px, #efede7 20px);
-            overflow: hidden;
-        }
-
-        .ph img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .ph span {
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            text-align: center;
-            padding: 1rem;
-            font-size: .8rem;
-            color: #4a5560;
-        }
 
         .acc-panel {
             display: grid;
@@ -356,30 +323,24 @@
                             ★</span> Rating across 27+ verified local farm reviews.</p>
                 </div>
 
-                <div class="md:col-span-5 relative fade" style="--i:4">
-                    <div class="zoom ph aspect-[4/5] rounded-t-[999px] rounded-b-2xl">
-                        <img data-parallax src="images/hero.jpg" alt="Broiler flock feeding at a Karachi poultry farm"
-                            onerror="this.remove()">
-                        <span>Replace with <b>images/hero.jpg</b><br>(portrait, 1200×1500)</span>
-                    </div>
-                    <div
-                        class="absolute -bottom-6 -left-4 sm:-left-10 bg-paper text-charcoal rounded-xl shadow-xl p-4 flex items-center gap-4 w-[260px]">
-                        <svg viewBox="0 0 200 150" class="w-20 shrink-0" fill="none" stroke="#1b4d3e" stroke-width="5"
-                            stroke-linecap="round" aria-hidden="true">
+                <div class="md:col-span-5 fade" style="--i:4">
+                    <div class="bg-white/5 border border-white/15 rounded-3xl p-8 text-center">
+                        <svg viewBox="0 0 200 150" class="w-full max-w-xs mx-auto" fill="none" stroke="#d4a373"
+                            stroke-width="4" stroke-linecap="round" aria-hidden="true">
                             <path d="M100 40v95M62 140h76" />
                             <g class="beam">
                                 <path d="M30 40h140" />
                             </g>
                             <g class="pan-l">
-                                <path d="M30 40l-20 50h40zM10 90h40" stroke-width="4" />
+                                <path d="M30 40l-20 50h40zM10 90h40" stroke-width="3" />
                             </g>
                             <g class="pan-r">
-                                <path d="M170 40l-20 50h40zM150 90h40" stroke-width="4" />
+                                <path d="M170 40l-20 50h40zM150 90h40" stroke-width="3" />
                             </g>
-                            <circle cx="100" cy="40" r="6" fill="#d4a373" stroke="none" />
+                            <circle cx="100" cy="40" r="6" fill="#f9f8f6" stroke="none" />
                         </svg>
-                        <p class="text-sm leading-snug"><b class="font-head">Balanced every batch.</b><br>Same spec in
-                            March as in June.</p>
+                        <p class="font-head font-bold text-2xl mt-4">Balanced every batch.</p>
+                        <p class="text-white/80 text-sm mt-1">Same specification in March as in June.</p>
                     </div>
                 </div>
             </div>
@@ -481,11 +442,6 @@
                     </div>
                 </div>
 
-                <div class="reveal zoom ph aspect-[21/9] rounded-2xl mt-6">
-                    <img src="images/plant.jpg" alt="Feed milling and blending at the Landhi plant"
-                        onerror="this.remove()">
-                    <span>Replace with <b>images/plant.jpg</b> (wide plant shot, 2100×900)</span>
-                </div>
             </div>
         </section>
 
@@ -494,38 +450,32 @@
             <div class="max-w-6xl mx-auto px-5">
                 <h2 class="reveal text-3xl md:text-4xl font-extrabold max-w-2xl leading-tight">Feed for every stage,
                     matched to what your birds need next.</h2>
-                <div class="mt-12 grid md:grid-cols-3 md:grid-rows-2 gap-5 md:h-[640px]">
-                    <article class="reveal lift zoom ph relative rounded-2xl md:col-span-2 md:row-span-2 min-h-[380px]">
-                        <img src="images/broiler.jpg" alt="Broiler chickens"
-                            onerror="this.remove()"><span>images/broiler.jpg</span>
-                        <div
-                            class="absolute inset-x-0 bottom-0 p-6 md:p-8 text-white bg-gradient-to-t from-charcoal/95 via-charcoal/70 to-transparent pt-24">
-                            <h3 class="font-head font-bold text-2xl">Broiler Feeds</h3>
-                            <p class="mt-2 text-white/90 text-sm max-w-md">Three rations, one goal: a tight feed
-                                conversion ratio from day one to market weight.</p>
-                            <div class="mt-4 flex flex-wrap gap-2 text-sm font-semibold"><span
-                                    class="bg-gold text-charcoal px-3 py-1 rounded-full">Starter</span><span
-                                    class="bg-gold text-charcoal px-3 py-1 rounded-full">Grower</span><span
-                                    class="bg-gold text-charcoal px-3 py-1 rounded-full">Finisher</span></div>
-                        </div>
+                <div class="mt-12 grid md:grid-cols-3 gap-5">
+                    <article class="reveal lift bg-forest text-white rounded-2xl p-8 md:col-span-2 md:row-span-2">
+                        <h3 class="font-head font-bold text-3xl">Broiler Feeds</h3>
+                        <p class="mt-3 text-white/85 max-w-md">Three rations, one goal: a tight feed conversion ratio
+                            from day one to market weight.</p>
+                        <ul class="mt-8 divide-y divide-white/15 border-y border-white/15">
+                            <li class="py-4 flex flex-wrap justify-between gap-2"><b
+                                    class="font-head text-lg text-gold">Starter</b><span class="text-white/85">Strong
+                                    early growth</span></li>
+                            <li class="py-4 flex flex-wrap justify-between gap-2"><b
+                                    class="font-head text-lg text-gold">Grower</b><span class="text-white/85">Steady
+                                    frame development</span></li>
+                            <li class="py-4 flex flex-wrap justify-between gap-2"><b
+                                    class="font-head text-lg text-gold">Finisher</b><span
+                                    class="text-white/85">Efficient final weight</span></li>
+                        </ul>
                     </article>
-                    <article class="reveal lift zoom ph relative rounded-2xl min-h-[300px]" style="--d:1">
-                        <img src="images/layer.jpg" alt="Layer hens"
-                            onerror="this.remove()"><span>images/layer.jpg</span>
-                        <div
-                            class="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-charcoal/95 via-charcoal/70 to-transparent pt-20">
-                            <h3 class="font-head font-bold text-xl">Layer Feeds</h3>
-                            <p class="mt-1 text-white/90 text-sm">Steady lay and firm shells through the cycle.</p>
-                        </div>
+                    <article class="reveal lift bg-charcoal text-white rounded-2xl p-8" style="--d:1">
+                        <h3 class="font-head font-bold text-2xl">Layer Feeds</h3>
+                        <p class="mt-3 text-white/85 text-sm leading-relaxed">Steady lay and firm shells through the
+                            whole cycle.</p>
                     </article>
-                    <article class="reveal lift zoom ph relative rounded-2xl min-h-[300px]" style="--d:2">
-                        <img src="images/animals.jpg" alt="Dairy and farm animals"
-                            onerror="this.remove()"><span>images/animals.jpg</span>
-                        <div
-                            class="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-charcoal/95 via-charcoal/70 to-transparent pt-20">
-                            <h3 class="font-head font-bold text-xl">Farm Animal Feeds</h3>
-                            <p class="mt-1 text-white/90 text-sm">Dairy and domestic animal nutrition.</p>
-                        </div>
+                    <article class="reveal lift bg-gold text-charcoal rounded-2xl p-8" style="--d:2">
+                        <h3 class="font-head font-bold text-2xl">Farm Animal Feeds</h3>
+                        <p class="mt-3 text-sm leading-relaxed">Dairy and domestic animal nutrition from the same plant
+                            and the same controls.</p>
                     </article>
                 </div>
             </div>
