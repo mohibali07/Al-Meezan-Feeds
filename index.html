@@ -35,6 +35,7 @@
         h3,
         .font-head {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.02em;
         }
 
         :focus-visible {
@@ -43,10 +44,24 @@
             border-radius: 4px;
         }
 
-        /* Hero entrance: staggered fade-and-rise */
+        /* Hero: headline lines slide up from a mask, then everything else fades in */
+        .mask {
+            display: block;
+            overflow: hidden;
+            padding-bottom: .08em;
+        }
+
         .rise {
+            display: inline-block;
             opacity: 0;
-            transform: translateY(24px);
+            transform: translateY(100%);
+            animation: rise 700ms cubic-bezier(.2, .7, .2, 1) forwards;
+            animation-delay: calc(var(--i, 0) * 110ms);
+        }
+
+        .fade {
+            opacity: 0;
+            transform: translateY(20px);
             animation: rise 700ms ease-out forwards;
             animation-delay: calc(var(--i, 0) * 110ms);
         }
@@ -55,6 +70,66 @@
             to {
                 opacity: 1;
                 transform: none;
+            }
+        }
+
+        /* Hero balance scale: the beam swings, then settles level. Al-Meezan means "the balance". */
+        .beam {
+            transform-origin: 100px 40px;
+            animation: swing 2.6s ease-out .6s both;
+        }
+
+        .pan-l {
+            transform-origin: 30px 40px;
+            animation: swing-r 2.6s ease-out .6s both;
+        }
+
+        .pan-r {
+            transform-origin: 170px 40px;
+            animation: swing-r 2.6s ease-out .6s both;
+        }
+
+        @keyframes swing {
+            0% {
+                transform: rotate(-14deg);
+            }
+
+            30% {
+                transform: rotate(9deg);
+            }
+
+            55% {
+                transform: rotate(-5deg);
+            }
+
+            78% {
+                transform: rotate(2deg);
+            }
+
+            100% {
+                transform: rotate(0);
+            }
+        }
+
+        @keyframes swing-r {
+            0% {
+                transform: rotate(14deg);
+            }
+
+            30% {
+                transform: rotate(-9deg);
+            }
+
+            55% {
+                transform: rotate(5deg);
+            }
+
+            78% {
+                transform: rotate(-2deg);
+            }
+
+            100% {
+                transform: rotate(0);
             }
         }
 
@@ -71,6 +146,34 @@
             transform: none;
         }
 
+        /* Bars and lines draw in when their section is revealed */
+        .bar,
+        .draw {
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 800ms cubic-bezier(.2, .7, .2, 1);
+            transition-delay: calc(var(--d, 0) * 90ms + 200ms);
+        }
+
+        .in .bar,
+        .in.draw,
+        .in .draw {
+            transform: scaleX(1);
+        }
+
+        /* Marquee */
+        .marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 38s linear infinite;
+        }
+
+        @keyframes marquee {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
         /* Micro-interactions */
         .btn {
             transition: transform 250ms ease-out;
@@ -85,26 +188,25 @@
         }
 
         .lift:hover {
-            transform: scale(1.03);
+            transform: scale(1.02);
         }
 
-        .img-zoom img {
+        .zoom img {
             transition: transform 700ms ease-out;
         }
 
-        .img-zoom:hover img {
+        .zoom:hover img {
             transform: scale(1.05);
         }
 
-        /* Header */
         #header {
             transition: box-shadow 250ms ease-out, background-color 250ms ease-out;
         }
 
         #header.scrolled {
-            background: rgba(249, 248, 246, .88);
+            background: rgba(27, 77, 62, .92);
             backdrop-filter: blur(12px);
-            box-shadow: 0 6px 24px rgba(34, 40, 49, .08);
+            box-shadow: 0 6px 24px rgba(34, 40, 49, .2);
         }
 
         /* Image placeholders: drop real files in /images and the hatch disappears */
@@ -133,7 +235,6 @@
             color: #4a5560;
         }
 
-        /* Accordion */
         .acc-panel {
             display: grid;
             grid-template-rows: 0fr;
@@ -159,15 +260,14 @@
         }
 
         input,
-        select,
-        textarea {
+        select {
             transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
         }
 
         input:focus,
         select:focus {
             border-color: #d4a373;
-            box-shadow: 0 0 0 3px rgba(212, 163, 115, .35);
+            box-shadow: 0 0 0 3px rgba(212, 163, 115, .4);
             outline: none;
         }
 
@@ -181,33 +281,39 @@
             }
 
             .rise,
+            .fade,
             .reveal {
                 opacity: 1;
+                transform: none;
+            }
+
+            .bar,
+            .draw {
                 transform: none;
             }
         }
     </style>
 </head>
 
-<body class="antialiased">
+<body class="antialiased pb-16 md:pb-0">
     <a href="#main"
         class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] bg-gold text-charcoal px-4 py-2 rounded">Skip
         to content</a>
 
-    <!-- 1. Header -->
-    <header id="header" class="fixed top-0 inset-x-0 z-50">
+    <!-- Header -->
+    <header id="header" class="fixed top-0 inset-x-0 z-50 text-white">
         <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-            <a href="#top" class="font-head font-extrabold text-xl text-forest"
-                aria-label="Al-Meezan Feeds home">Al-Meezan Feeds</a>
+            <a href="#top" class="font-head font-extrabold text-xl" aria-label="Al-Meezan Feeds home">Al-Meezan
+                Feeds</a>
             <nav aria-label="Primary" class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#products" class="hover:text-forest">Products</a>
-                <a href="#quality" class="hover:text-forest">Quality</a>
-                <a href="#about" class="hover:text-forest">About</a>
-                <a href="#contact" class="hover:text-forest">Contact</a>
+                <a href="#products" class="hover:text-gold">Products</a>
+                <a href="#quality" class="hover:text-gold">Quality</a>
+                <a href="#about" class="hover:text-gold">About</a>
+                <a href="#contact" class="hover:text-gold">Contact</a>
             </nav>
             <div class="flex items-center gap-3">
                 <a href="#contact"
-                    class="btn hidden sm:inline-block bg-forest text-white text-sm font-semibold px-5 py-2.5 rounded-md">Request
+                    class="btn hidden sm:inline-block bg-gold text-charcoal text-sm font-bold px-5 py-2.5 rounded-md">Request
                     Quote</a>
                 <button id="menuBtn" class="md:hidden p-2" aria-label="Open menu" aria-expanded="false"
                     aria-controls="mobileNav">
@@ -218,217 +324,299 @@
             </div>
         </div>
         <nav id="mobileNav" aria-label="Mobile"
-            class="hidden md:hidden bg-paper border-t border-black/5 px-5 py-4 space-y-3 font-medium">
+            class="hidden md:hidden bg-forest border-t border-white/10 px-5 py-4 space-y-3 font-medium">
             <a href="#products" class="block">Products</a><a href="#quality" class="block">Quality</a>
             <a href="#about" class="block">About</a><a href="#contact" class="block">Contact</a>
-            <a href="#contact" class="block bg-forest text-white text-center py-3 rounded-md">Request Quote</a>
         </nav>
     </header>
 
     <main id="main">
-        <!-- 2. Hero -->
-        <section id="top" class="pt-28 pb-16 md:pt-36 md:pb-24">
-            <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-12 gap-10 items-center">
+        <!-- Hero -->
+        <section id="top" class="bg-forest text-white pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden">
+            <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-12 gap-12 items-center">
                 <div class="md:col-span-7">
-                    <p class="rise inline-block bg-forest/10 text-forest text-sm font-semibold px-3 py-1.5 rounded-full"
+                    <p class="fade inline-block bg-white/10 text-gold text-sm font-semibold px-3 py-1.5 rounded-full"
                         style="--i:0">ISO-Standard Poultry &amp; Livestock Nutrition in Karachi</p>
-                    <h1 class="rise mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] text-charcoal"
-                        style="--i:1">Engineered Nutrition for Maximum Flock Yield &amp; Farm Profitability.</h1>
-                    <p class="rise mt-6 text-lg text-charcoal/80 max-w-xl leading-relaxed" style="--i:2">Scientifically
+                    <h1 class="mt-6 text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold leading-[1.08]">
+                        <span class="mask"><span class="rise" style="--i:1">Engineered Nutrition</span></span>
+                        <span class="mask"><span class="rise" style="--i:2">for Maximum Flock Yield</span></span>
+                        <span class="mask"><span class="rise" style="--i:3">&amp; Farm Profitability.</span></span>
+                    </h1>
+                    <p class="fade mt-6 text-lg text-white/85 max-w-xl leading-relaxed" style="--i:5">Scientifically
                         formulated broiler and layer feeds produced at our state-of-the-art Landhi manufacturing plant.
                         Trusted by top poultry farmers across the region.</p>
-                    <div class="rise mt-8 flex flex-wrap gap-3" style="--i:3">
-                        <a href="#contact" class="btn bg-forest text-white font-semibold px-6 py-3.5 rounded-md">Request
-                            a Feed Quote</a>
+                    <div class="fade mt-8 flex flex-wrap gap-3" style="--i:6">
+                        <a href="#contact" class="btn bg-gold text-charcoal font-bold px-6 py-3.5 rounded-md">Request a
+                            Feed Quote</a>
                         <a href="tel:+922135021993"
-                            class="btn border-2 border-charcoal text-charcoal font-semibold px-6 py-3.5 rounded-md">Call
+                            class="btn border-2 border-white/70 text-white font-semibold px-6 py-3.5 rounded-md">Call
                             +92 21 35021993</a>
                     </div>
-                    <p class="rise mt-6 text-sm text-charcoal/75" style="--i:4"><span
-                            class="text-[#8a5a1f] font-semibold">4.6 ★</span> Rating across 27+ verified local farm
-                        reviews.</p>
+                    <p class="fade mt-6 text-sm text-white/80" style="--i:7"><span class="text-gold font-semibold">4.6
+                            ★</span> Rating across 27+ verified local farm reviews.</p>
                 </div>
-                <div class="md:col-span-5 rise" style="--i:3">
-                    <div class="img-zoom ph aspect-[4/5] rounded-2xl">
-                        <img src="images/hero.jpg" alt="Broiler flock feeding at a Karachi poultry farm"
+
+                <div class="md:col-span-5 relative fade" style="--i:4">
+                    <div class="zoom ph aspect-[4/5] rounded-t-[999px] rounded-b-2xl">
+                        <img data-parallax src="images/hero.jpg" alt="Broiler flock feeding at a Karachi poultry farm"
                             onerror="this.remove()">
                         <span>Replace with <b>images/hero.jpg</b><br>(portrait, 1200×1500)</span>
                     </div>
+                    <div
+                        class="absolute -bottom-6 -left-4 sm:-left-10 bg-paper text-charcoal rounded-xl shadow-xl p-4 flex items-center gap-4 w-[260px]">
+                        <svg viewBox="0 0 200 150" class="w-20 shrink-0" fill="none" stroke="#1b4d3e" stroke-width="5"
+                            stroke-linecap="round" aria-hidden="true">
+                            <path d="M100 40v95M62 140h76" />
+                            <g class="beam">
+                                <path d="M30 40h140" />
+                            </g>
+                            <g class="pan-l">
+                                <path d="M30 40l-20 50h40zM10 90h40" stroke-width="4" />
+                            </g>
+                            <g class="pan-r">
+                                <path d="M170 40l-20 50h40zM150 90h40" stroke-width="4" />
+                            </g>
+                            <circle cx="100" cy="40" r="6" fill="#d4a373" stroke="none" />
+                        </svg>
+                        <p class="text-sm leading-snug"><b class="font-head">Balanced every batch.</b><br>Same spec in
+                            March as in June.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. Credentials -->
-        <section id="quality" class="bg-forest text-white py-12">
-            <div class="max-w-6xl mx-auto px-5 grid grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="reveal" style="--d:0">
+        <!-- Marquee -->
+        <div class="bg-gold text-charcoal py-4 overflow-hidden" aria-hidden="true">
+            <div class="marquee font-head font-bold text-lg whitespace-nowrap">
+                <span class="px-6">Broiler starter</span><span class="px-6">•</span><span class="px-6">Broiler
+                    grower</span><span class="px-6">•</span><span class="px-6">Broiler finisher</span><span
+                    class="px-6">•</span><span class="px-6">Layer feed</span><span class="px-6">•</span><span
+                    class="px-6">Dairy &amp; farm animal feed</span><span class="px-6">•</span><span class="px-6">Direct
+                    plant dispatch</span><span class="px-6">•</span>
+                <span class="px-6">Broiler starter</span><span class="px-6">•</span><span class="px-6">Broiler
+                    grower</span><span class="px-6">•</span><span class="px-6">Broiler finisher</span><span
+                    class="px-6">•</span><span class="px-6">Layer feed</span><span class="px-6">•</span><span
+                    class="px-6">Dairy &amp; farm animal feed</span><span class="px-6">•</span><span class="px-6">Direct
+                    plant dispatch</span><span class="px-6">•</span>
+            </div>
+        </div>
+
+        <!-- Credentials -->
+        <section id="quality" class="py-14">
+            <div class="max-w-6xl mx-auto px-5 grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="reveal border-t-4 border-forest pt-4" style="--d:0">
                     <h2 class="font-head font-bold text-lg">Direct Plant Dispatch</h2>
-                    <p class="mt-1 text-sm text-white/80">Loaded and sent from our own plant.</p>
+                    <p class="mt-1 text-sm text-charcoal/75">Loaded and sent from our own plant.</p>
                 </div>
-                <div class="reveal" style="--d:1">
+                <div class="reveal border-t-4 border-forest pt-4" style="--d:1">
                     <h2 class="font-head font-bold text-lg">Strict Lab Quality Control</h2>
-                    <p class="mt-1 text-sm text-white/80">Every batch checked before it leaves.</p>
+                    <p class="mt-1 text-sm text-charcoal/75">Every batch checked before it leaves.</p>
                 </div>
-                <div class="reveal" style="--d:2">
+                <div class="reveal border-t-4 border-forest pt-4" style="--d:2">
                     <h2 class="font-head font-bold text-lg">Optimized FCR Formulations</h2>
-                    <p class="mt-1 text-sm text-white/80">Built to turn feed into weight and eggs.</p>
+                    <p class="mt-1 text-sm text-charcoal/75">Built to turn feed into weight and eggs.</p>
                 </div>
-                <div class="reveal" style="--d:3">
+                <div class="reveal border-t-4 border-forest pt-4" style="--d:3">
                     <h2 class="font-head font-bold text-lg">Established Karachi Production Facility</h2>
-                    <p class="mt-1 text-sm text-white/80">Landhi / Bin Qasim Town.</p>
+                    <p class="mt-1 text-sm text-charcoal/75">Landhi / Bin Qasim Town.</p>
                 </div>
             </div>
         </section>
 
-        <!-- 4. Problem / Solution -->
-        <section id="about" class="py-20 md:py-28">
-            <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-2 gap-12 items-center">
-                <div class="reveal img-zoom ph aspect-[5/4] rounded-2xl order-last md:order-first">
+        <!-- Problem / Solution -->
+        <section id="about" class="pb-20 md:pb-28">
+            <div class="max-w-6xl mx-auto px-5">
+                <h2 class="reveal text-3xl md:text-4xl font-extrabold max-w-2xl leading-tight">Uneven feed shows up in
+                    your flock before it shows up in your books.</h2>
+                <p class="reveal mt-5 max-w-2xl text-charcoal/80 leading-relaxed" style="--d:1">When one batch differs
+                    from the next, growth slips and mortality creeps up. Precision blending holds every batch to the
+                    same specification.</p>
+
+                <div class="mt-12 grid md:grid-cols-2 gap-6">
+                    <div class="reveal bg-white rounded-2xl p-6 md:p-8 border border-black/5">
+                        <h3 class="font-head font-bold text-xl">Inconsistent feed</h3>
+                        <p class="text-sm text-charcoal/70 mt-1">Nutrient level, batch by batch (illustrative)</p>
+                        <div class="mt-6 space-y-3" role="img"
+                            aria-label="Bars of uneven length showing nutrient levels varying between batches">
+                            <div class="h-3 rounded bg-charcoal/15">
+                                <div class="bar h-3 rounded bg-[#8d3b2f]" style="width:92%;--d:0"></div>
+                            </div>
+                            <div class="h-3 rounded bg-charcoal/15">
+                                <div class="bar h-3 rounded bg-[#8d3b2f]" style="width:61%;--d:1"></div>
+                            </div>
+                            <div class="h-3 rounded bg-charcoal/15">
+                                <div class="bar h-3 rounded bg-[#8d3b2f]" style="width:78%;--d:2"></div>
+                            </div>
+                            <div class="h-3 rounded bg-charcoal/15">
+                                <div class="bar h-3 rounded bg-[#8d3b2f]" style="width:54%;--d:3"></div>
+                            </div>
+                            <div class="h-3 rounded bg-charcoal/15">
+                                <div class="bar h-3 rounded bg-[#8d3b2f]" style="width:85%;--d:4"></div>
+                            </div>
+                        </div>
+                        <p class="mt-5 text-sm">Slower growth, more losses, longer days on the shed.</p>
+                    </div>
+                    <div class="reveal bg-forest text-white rounded-2xl p-6 md:p-8" style="--d:1">
+                        <h3 class="font-head font-bold text-xl">Al-Meezan precision blend</h3>
+                        <p class="text-sm text-white/75 mt-1">Nutrient level, batch by batch (illustrative)</p>
+                        <div class="mt-6 space-y-3" role="img"
+                            aria-label="Bars of equal length showing consistent nutrient levels across batches">
+                            <div class="h-3 rounded bg-white/15">
+                                <div class="bar h-3 rounded bg-gold" style="width:80%;--d:0"></div>
+                            </div>
+                            <div class="h-3 rounded bg-white/15">
+                                <div class="bar h-3 rounded bg-gold" style="width:80%;--d:1"></div>
+                            </div>
+                            <div class="h-3 rounded bg-white/15">
+                                <div class="bar h-3 rounded bg-gold" style="width:80%;--d:2"></div>
+                            </div>
+                            <div class="h-3 rounded bg-white/15">
+                                <div class="bar h-3 rounded bg-gold" style="width:80%;--d:3"></div>
+                            </div>
+                            <div class="h-3 rounded bg-white/15">
+                                <div class="bar h-3 rounded bg-gold" style="width:80%;--d:4"></div>
+                            </div>
+                        </div>
+                        <p class="mt-5 text-sm">The same nutrition in every bag, from the first batch to the last.</p>
+                    </div>
+                </div>
+
+                <div class="reveal zoom ph aspect-[21/9] rounded-2xl mt-6">
                     <img src="images/plant.jpg" alt="Feed milling and blending at the Landhi plant"
                         onerror="this.remove()">
-                    <span>Replace with <b>images/plant.jpg</b><br>(plant floor / mixer, 1400×1120)</span>
-                </div>
-                <div>
-                    <h2 class="reveal text-3xl md:text-4xl font-extrabold leading-tight">Uneven feed shows up in your
-                        flock before it shows up in your books.</h2>
-                    <p class="reveal mt-5 text-charcoal/80 leading-relaxed" style="--d:1">When one batch differs from
-                        the next, growth rates slip, birds fall behind on weight and mortality creeps up. You pay for it
-                        in extra days on the shed and lost margin.</p>
-                    <p class="reveal mt-4 leading-relaxed" style="--d:2"><b class="text-forest">Our answer is precision
-                            blending.</b> Each formulation is weighed, mixed and tested to the same specification, so
-                        the bag you open in March gives your birds the same nutrition as the one you open in June.</p>
+                    <span>Replace with <b>images/plant.jpg</b> (wide plant shot, 2100×900)</span>
                 </div>
             </div>
         </section>
 
-        <!-- 5. Products -->
+        <!-- Products -->
         <section id="products" class="py-20 md:py-28 bg-white">
             <div class="max-w-6xl mx-auto px-5">
-                <h2 class="reveal text-3xl md:text-4xl font-extrabold max-w-2xl">Feed for every stage, matched to what
-                    your birds need next.</h2>
-                <div class="mt-12 grid md:grid-cols-3 gap-6">
-                    <article class="reveal lift bg-paper rounded-2xl overflow-hidden border border-black/5"
-                        style="--d:0">
-                        <div class="ph aspect-[4/3]"><img src="images/broiler.jpg" alt="Broiler chickens"
-                                onerror="this.remove()"><span>images/broiler.jpg</span></div>
-                        <div class="p-6">
-                            <h3 class="font-head font-bold text-xl">Broiler Feeds</h3>
-                            <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Starter, grower and finisher
-                                rations built for strong early growth and a tight feed conversion ratio.</p>
-                            <ul class="mt-4 text-sm space-y-1.5">
-                                <li>Starter: fast early weight gain</li>
-                                <li>Grower: steady frame development</li>
-                                <li>Finisher: efficient final weight</li>
-                            </ul>
+                <h2 class="reveal text-3xl md:text-4xl font-extrabold max-w-2xl leading-tight">Feed for every stage,
+                    matched to what your birds need next.</h2>
+                <div class="mt-12 grid md:grid-cols-3 md:grid-rows-2 gap-5 md:h-[640px]">
+                    <article class="reveal lift zoom ph relative rounded-2xl md:col-span-2 md:row-span-2 min-h-[380px]">
+                        <img src="images/broiler.jpg" alt="Broiler chickens"
+                            onerror="this.remove()"><span>images/broiler.jpg</span>
+                        <div
+                            class="absolute inset-x-0 bottom-0 p-6 md:p-8 text-white bg-gradient-to-t from-charcoal/95 via-charcoal/70 to-transparent pt-24">
+                            <h3 class="font-head font-bold text-2xl">Broiler Feeds</h3>
+                            <p class="mt-2 text-white/90 text-sm max-w-md">Three rations, one goal: a tight feed
+                                conversion ratio from day one to market weight.</p>
+                            <div class="mt-4 flex flex-wrap gap-2 text-sm font-semibold"><span
+                                    class="bg-gold text-charcoal px-3 py-1 rounded-full">Starter</span><span
+                                    class="bg-gold text-charcoal px-3 py-1 rounded-full">Grower</span><span
+                                    class="bg-gold text-charcoal px-3 py-1 rounded-full">Finisher</span></div>
                         </div>
                     </article>
-                    <article class="reveal lift bg-paper rounded-2xl overflow-hidden border border-black/5"
-                        style="--d:1">
-                        <div class="ph aspect-[4/3]"><img src="images/layer.jpg" alt="Layer hens"
-                                onerror="this.remove()"><span>images/layer.jpg</span></div>
-                        <div class="p-6">
+                    <article class="reveal lift zoom ph relative rounded-2xl min-h-[300px]" style="--d:1">
+                        <img src="images/layer.jpg" alt="Layer hens"
+                            onerror="this.remove()"><span>images/layer.jpg</span>
+                        <div
+                            class="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-charcoal/95 via-charcoal/70 to-transparent pt-20">
                             <h3 class="font-head font-bold text-xl">Layer Feeds</h3>
-                            <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Balanced rations that support
-                                consistent lay, shell quality and flock health through the cycle.</p>
-                            <ul class="mt-4 text-sm space-y-1.5">
-                                <li>Steady production</li>
-                                <li>Firm, well-formed shells</li>
-                                <li>Reliable batch to batch</li>
-                            </ul>
+                            <p class="mt-1 text-white/90 text-sm">Steady lay and firm shells through the cycle.</p>
                         </div>
                     </article>
-                    <article class="reveal lift bg-paper rounded-2xl overflow-hidden border border-black/5"
-                        style="--d:2">
-                        <div class="ph aspect-[4/3]"><img src="images/animals.jpg" alt="Dairy and farm animals"
-                                onerror="this.remove()"><span>images/animals.jpg</span></div>
-                        <div class="p-6">
+                    <article class="reveal lift zoom ph relative rounded-2xl min-h-[300px]" style="--d:2">
+                        <img src="images/animals.jpg" alt="Dairy and farm animals"
+                            onerror="this.remove()"><span>images/animals.jpg</span>
+                        <div
+                            class="absolute inset-x-0 bottom-0 p-6 text-white bg-gradient-to-t from-charcoal/95 via-charcoal/70 to-transparent pt-20">
                             <h3 class="font-head font-bold text-xl">Farm Animal Feeds</h3>
-                            <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Nutrition for dairy and other
-                                domestic farm animals, made in the same plant under the same controls.</p>
-                            <ul class="mt-4 text-sm space-y-1.5">
-                                <li>Dairy and livestock</li>
-                                <li>Consistent formulation</li>
-                                <li>Available through dealers</li>
-                            </ul>
+                            <p class="mt-1 text-white/90 text-sm">Dairy and domestic animal nutrition.</p>
                         </div>
                     </article>
                 </div>
             </div>
         </section>
 
-        <!-- 6. How it works -->
+        <!-- How it works -->
         <section class="py-20 md:py-28">
             <div class="max-w-6xl mx-auto px-5">
                 <h2 class="reveal text-3xl md:text-4xl font-extrabold">From call to delivery in three steps.</h2>
-                <ol class="mt-12 grid md:grid-cols-3 gap-10">
-                    <li class="reveal" style="--d:0"><span class="font-head font-extrabold text-5xl text-gold"
-                            aria-hidden="true">1</span>
-                        <h3 class="mt-2 font-head font-bold text-xl">Consult or select feed type</h3>
-                        <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Tell us your birds, their age and your
-                            goals. We will point you to the right ration.</p>
-                    </li>
-                    <li class="reveal" style="--d:1"><span class="font-head font-extrabold text-5xl text-gold"
-                            aria-hidden="true">2</span>
-                        <h3 class="mt-2 font-head font-bold text-xl">Order by landline or through a dealer</h3>
-                        <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Call +92 21 35021993 or buy through our
-                            dealer network.</p>
-                    </li>
-                    <li class="reveal" style="--d:2"><span class="font-head font-extrabold text-5xl text-gold"
-                            aria-hidden="true">3</span>
-                        <h3 class="mt-2 font-head font-bold text-xl">Fast dispatch from Landhi</h3>
-                        <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Your order leaves directly from our
-                            Karachi plant.</p>
-                    </li>
-                </ol>
+                <div class="reveal mt-14 relative">
+                    <div class="hidden md:block absolute top-6 left-6 right-6 h-0.5 bg-charcoal/15">
+                        <div class="draw h-0.5 bg-forest" style="--d:2"></div>
+                    </div>
+                    <ol class="relative grid md:grid-cols-3 gap-10">
+                        <li><span
+                                class="grid place-items-center w-12 h-12 rounded-full bg-forest text-white font-head font-bold text-lg"
+                                aria-hidden="true">1</span>
+                            <h3 class="mt-5 font-head font-bold text-xl">Consult or select feed type</h3>
+                            <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Tell us your birds, their age and
+                                your goals. We point you to the right ration.</p>
+                        </li>
+                        <li><span
+                                class="grid place-items-center w-12 h-12 rounded-full bg-forest text-white font-head font-bold text-lg"
+                                aria-hidden="true">2</span>
+                            <h3 class="mt-5 font-head font-bold text-xl">Order by landline or through a dealer</h3>
+                            <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Call +92 21 35021993 or buy through
+                                our dealer network.</p>
+                        </li>
+                        <li><span
+                                class="grid place-items-center w-12 h-12 rounded-full bg-gold text-charcoal font-head font-bold text-lg"
+                                aria-hidden="true">3</span>
+                            <h3 class="mt-5 font-head font-bold text-xl">Fast dispatch from Landhi</h3>
+                            <p class="mt-2 text-charcoal/80 text-sm leading-relaxed">Your order leaves directly from our
+                                Karachi plant.</p>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 
-        <!-- 7. Social proof -->
+        <!-- Testimonials -->
         <section class="py-20 md:py-28 bg-charcoal text-white">
             <div class="max-w-6xl mx-auto px-5">
                 <h2 class="reveal text-3xl md:text-4xl font-extrabold max-w-2xl">What farmers say about the feed.</h2>
                 <div class="mt-12 grid md:grid-cols-3 gap-6">
-                    <!-- Real Google reviews (from screenshots) -->
                     <figure class="reveal lift bg-white/5 border border-white/10 rounded-2xl p-6" style="--d:0">
-                        <div class="text-gold" aria-label="5 out of 5 stars">★★★★★</div>
+                        <div class="font-head text-6xl leading-none text-gold" aria-hidden="true">“</div>
+                        <div class="text-gold text-sm" aria-label="5 out of 5 stars">★★★★★</div>
                         <blockquote class="mt-3 text-white/90 leading-relaxed">A good feed manufacturing plant.
                         </blockquote>
                         <figcaption class="mt-4 text-sm text-white/70">Raza Qureshi, Google review</figcaption>
                     </figure>
                     <figure class="reveal lift bg-white/5 border border-white/10 rounded-2xl p-6" style="--d:1">
-                        <div class="text-gold" aria-label="5 out of 5 stars">★★★★★</div>
+                        <div class="font-head text-6xl leading-none text-gold" aria-hidden="true">“</div>
+                        <div class="text-gold text-sm" aria-label="5 out of 5 stars">★★★★★</div>
                         <blockquote class="mt-3 text-white/90 leading-relaxed">Poultry and dairy feed manufacturers,
                             producing feed for broiler and layer birds and for domestic farm animals.</blockquote>
                         <figcaption class="mt-4 text-sm text-white/70">ABS, Google Local Guide</figcaption>
                     </figure>
                     <!-- TODO: replace with a real farmer quote and name -->
                     <figure class="reveal lift bg-white/5 border border-white/10 rounded-2xl p-6" style="--d:2">
-                        <div class="text-gold" aria-label="5 out of 5 stars">★★★★★</div>
+                        <div class="font-head text-6xl leading-none text-gold" aria-hidden="true">“</div>
+                        <div class="text-gold text-sm" aria-label="5 out of 5 stars">★★★★★</div>
                         <blockquote class="mt-3 text-white/90 leading-relaxed">[Add a farmer's words on feed consistency
                             and bird health here.]</blockquote>
                         <figcaption class="mt-4 text-sm text-white/70">[Name, farm, location]</figcaption>
                     </figure>
                 </div>
-
-                <!-- TODO: replace data-count values with real figures -->
-                <dl class="mt-16 grid sm:grid-cols-3 gap-8 border-t border-white/15 pt-10">
-                    <div class="reveal">
-                        <dd class="font-head font-extrabold text-5xl text-gold"><span data-count="15">0</span>+</dd>
-                        <dt class="mt-1 text-white/80">Years of manufacturing excellence</dt>
-                    </div>
-                    <div class="reveal" style="--d:1">
-                        <dd class="font-head font-extrabold text-5xl text-gold"><span data-count="10000">0</span>+</dd>
-                        <dt class="mt-1 text-white/80">Tons of quality feed dispatched</dt>
-                    </div>
-                    <div class="reveal" style="--d:2">
-                        <dd class="font-head font-extrabold text-5xl text-gold"><span data-count="300">0</span>+</dd>
-                        <dt class="mt-1 text-white/80">Satisfied farm partners</dt>
-                    </div>
-                </dl>
             </div>
         </section>
 
-        <!-- 8. FAQ -->
+        <!-- Stats -->
+        <!-- TODO: replace data-count values with real figures -->
+        <section class="bg-gold text-charcoal py-14">
+            <dl class="max-w-6xl mx-auto px-5 grid sm:grid-cols-3 gap-8 text-center sm:text-left">
+                <div class="reveal">
+                    <dd class="font-head font-extrabold text-6xl"><span data-count="15">0</span>+</dd>
+                    <dt class="mt-1 font-medium">Years of manufacturing excellence</dt>
+                </div>
+                <div class="reveal" style="--d:1">
+                    <dd class="font-head font-extrabold text-6xl"><span data-count="10000">0</span>+</dd>
+                    <dt class="mt-1 font-medium">Tons of quality feed dispatched</dt>
+                </div>
+                <div class="reveal" style="--d:2">
+                    <dd class="font-head font-extrabold text-6xl"><span data-count="300">0</span>+</dd>
+                    <dt class="mt-1 font-medium">Satisfied farm partners</dt>
+                </div>
+            </dl>
+        </section>
+
+        <!-- FAQ -->
         <section class="py-20 md:py-28">
             <div class="max-w-3xl mx-auto px-5">
                 <h2 class="reveal text-3xl md:text-4xl font-extrabold">Common questions</h2>
@@ -499,11 +687,11 @@
             </div>
         </section>
 
-        <!-- 9. Final CTA -->
+        <!-- Final CTA -->
         <section id="contact" class="bg-forest text-white py-20 md:py-28">
             <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-2 gap-12 items-start">
                 <div>
-                    <h2 class="reveal text-3xl md:text-4xl font-extrabold leading-tight">Lock in your feed supply before
+                    <h2 class="reveal text-3xl md:text-5xl font-extrabold leading-tight">Lock in your feed supply before
                         your next flock arrives.</h2>
                     <p class="reveal mt-5 text-white/85 leading-relaxed max-w-md" style="--d:1">Farmers and dealers:
                         request a quote, or speak to our team directly.</p>
@@ -538,7 +726,7 @@
         </section>
     </main>
 
-    <!-- 10. Footer -->
+    <!-- Footer -->
     <footer class="bg-charcoal text-white/80 py-14">
         <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-3 gap-10 text-sm">
             <div>
@@ -563,6 +751,14 @@
         <p class="max-w-6xl mx-auto px-5 mt-10 pt-6 border-t border-white/10 text-xs text-white/60">&copy; <span
                 id="year">2026</span> Al-Meezan Feeds (Pvt) Ltd. All rights reserved.</p>
     </footer>
+
+    <!-- Mobile call bar -->
+    <div class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-charcoal p-3 flex gap-3">
+        <a href="tel:+922135021993" class="flex-1 text-center bg-gold text-charcoal font-bold py-3 rounded-md">Call
+            now</a>
+        <a href="#contact"
+            class="flex-1 text-center border border-white/60 text-white font-semibold py-3 rounded-md">Get quote</a>
+    </div>
 
     <script src="script.js"></script>
 </body>

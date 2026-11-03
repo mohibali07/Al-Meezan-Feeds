@@ -38,6 +38,24 @@
     .querySelectorAll(".reveal")
     .forEach((el) => (reduce ? el.classList.add("in") : io.observe(el)));
 
+  // Hero image parallax (transform only)
+  const px = document.querySelector("[data-parallax]");
+  if (px && !reduce) {
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          px.style.transform = `translateY(${Math.min(window.scrollY, 600) * 0.08}px) scale(1.08)`;
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+  }
+
   // Animated counters
   const fmt = (n) => n.toLocaleString("en-US");
   const countIO = new IntersectionObserver(
@@ -70,8 +88,7 @@
   // FAQ accordion
   document.querySelectorAll(".acc button").forEach((b) => {
     b.addEventListener("click", () => {
-      const item = b.closest(".acc");
-      const open = item.classList.toggle("acc-open");
+      const open = b.closest(".acc").classList.toggle("acc-open");
       b.setAttribute("aria-expanded", open);
     });
   });
